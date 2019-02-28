@@ -1,0 +1,23 @@
+app:
+  nav:
+    login: Connexion
+    logout: Déconnexion
+    dashboard: Tableau de bord
+    addTitle: Merci de donner un titre à cette page pour mettre à jour la navigation.
+    translation: Merci de traduire le titre de cette page pour mettre à jour la navigation.
+  dashboard:
+    newLeaf: Créer une nouvelle page
+    deleteLeaf: Supprimer une page
+    designModification: Modifier le design
+  newLeafPattern:
+    title: Créer une nouvelle page.
+    addTitle: Merci de donner un titre à cette page.
+    draft: Merci de rédiger un contenu.
+    translation: Merci d'effectuer la traduction.
+  newPage:
+    title: Mettre à jour cette page.
+    resolutions: Régler les différentes resolutions d'écrans.
+    addTitle: Merci de donner un titre à cette page pour mettre à jour la navigation.
+    draft: Merci de rédiger un contenu.
+    translation: Merci d'effectuer la traduction.
+    growItemAlert: Merci d'angrandir l'élément pour l'adapter au contenu !

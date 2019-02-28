@@ -1,0 +1,24 @@
+app:
+  hello: Hello, %{name}!
+  nav:
+    login: Login
+    logout: Logout
+    dashboard: Dashboard
+    addTitle: Please, write title on this page for update navigation.
+    translation: Please, translate title on this page for update navigation.
+  dashboard:
+    newLeaf: Create a new page
+    deleteLeaf: Delete a page
+    designModification: Design modification
+  newLeafPattern:
+    title: Create a new page.
+    addTitle: Please, write title.
+    draft: Please, write content.
+    translation: Thank you to translate.
+  newPage:
+    title: Update this page.
+    resolutions: Think to fix all screen resolutions.
+    addTitle: Please, write title on this page for update navigation.
+    draft: Please, write content.
+    translation: Thank you to translate.
+    growItemAlert: Thank you to expand the element to fit the content!
