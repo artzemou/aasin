@@ -10,6 +10,7 @@ import * as SetCurrentBreakpoint from '@/store/actions/setCurrentBreakpoint'
 
 import {I18n } from 'react-redux-i18n'
 import replaceHtmlEntities from 'modules/replaceHtmlEntities'
+import triggerDragAndDrop from 'modules/triggerDragAndDrop'
 import getRandomColor from 'modules/getRandomColor'
 import ResizeDetector from 'react-resize-detector'
 import TinyEditor from '@/views/admin/components/TinyEditor'
@@ -36,8 +37,6 @@ class MyResponsiveGrid extends React.Component {
     this.gridItemFocus = this.gridItemFocus.bind(this)
     this.setItemHeigth = this.setItemHeigth.bind(this)
     this.checkAllBreakpointAndUpdate = this.checkAllBreakpointAndUpdate.bind(this)
-    this.translateY = this.translateY.bind(this)
-    this.getComputedTranslateXY = this.getComputedTranslateXY.bind(this)
 
     this.state = {
       initDone: false,
@@ -109,8 +108,8 @@ class MyResponsiveGrid extends React.Component {
       console.log(currentBreakpoint)
       setTimeout(() => {
         this.setState({transition: 'height, transform'})
-        this.setItemHeigth()
-      }, 1000);
+        this.updateInput()
+      }, 500);
     }
   }
 
@@ -123,47 +122,38 @@ class MyResponsiveGrid extends React.Component {
      })
   }
 
-  setItemHeigth(bool = 0) {
-    bool++
+  setItemHeigth() {
     if (this.state.contents.length > 0) {
       const {leaf, currentBreakpoint} = this.props
       let {layouts} = this.state
-      let index = 0, itemsToResize = [], itemsResizedDiff = [], translateY
+      let index = 0, itemsToResize = []
       for (let item of document.querySelectorAll('.react-draggable')) {
         let mceBody = item.childNodes[0].childNodes[1]
         let mceBodyHeight = mceBody.clientHeight
         if (layouts[currentBreakpoint][index]) {
           if (Math.round(mceBodyHeight*.1) <= 20) {
-            translateY = 28 - layouts[currentBreakpoint][index].h
             layouts[currentBreakpoint][index].h = 28
             let itemHeight = 280
             itemsToResize = [
               ...itemsToResize,
               {tag: item, height: itemHeight}
             ]
-            itemsResizedDiff = [
-              ...itemsResizedDiff,
-              {tag: item, translateY: translateY}
-            ]
+
           }
           else {
-            translateY = (Math.round(mceBodyHeight*.1) + 8) - layouts[currentBreakpoint][index].h
             layouts[currentBreakpoint][index].h = Math.round(mceBodyHeight*.1) + 8
             let itemHeight = Math.round(mceBodyHeight) + 80
             itemsToResize = [
               ...itemsToResize,
               {tag: item, height: itemHeight}
             ]
-            itemsResizedDiff = [
-              ...itemsResizedDiff,
-              {tag: item, translateY: translateY }
-            ]
+
           }
         }
         index++
       }
       const _this = this
-      console.log(itemsResizedDiff)
+      console.log(itemsToResize)
       Promise.all(itemsToResize.map((item) => {
           new Promise((resolve) => {
             item.tag.style.height = `${item.height}px`
@@ -172,99 +162,13 @@ class MyResponsiveGrid extends React.Component {
         _this.setState({
           layouts: layouts
         }, () => {
-          _this.translateY(itemsToResize, itemsResizedDiff)
           console.log('item resized')
+          setTimeout(() => {triggerDragAndDrop('.react-grid-item', '.react-grid-layout')}, 1);
+
 
         })
       })
     }
-  }
-
-
-  translateY(itemsToResize, itemsResizedDiff) {
-    const {layouts} = this.state
-    const {currentBreakpoint} = this.props
-    const _this = this
-    let itemsFocused = [], others = [], coor, x1, x2, x3, x4, h, y, itemsTranslated = [], itemsOrigin = [], minY = 0
-    Promise.all(itemsResizedDiff.map((item, i) => {
-        new Promise((resolve) => {
-          if(item.translateY !== 0) itemsFocused = [...itemsFocused, i]
-        })
-    })).then(() => {
-
-      itemsResizedDiff.map((item, index) => {
-        itemsFocused.map((iIndex, i) => {
-          coor = _this.getComputedTranslateXY(item.tag)
-          x1 = layouts[currentBreakpoint][iIndex].x
-          x2 = x1 + layouts[currentBreakpoint][iIndex].w
-          x3 = layouts[currentBreakpoint][index].x
-          x4 = x3 + layouts[currentBreakpoint][index].w
-
-          // if(coor[1] !== 0) {
-          //    console.log(x1, x2, x3, x4)
-          //    console.log(x1 >= x3 && x2 <= x4)
-          //    console.log(x1 > x3 && x2 > x4)
-          //    console.log(x1 < x3 && x2 < x4)
-          //    console.log(h > y)
-          // }
-          if(iIndex !== index) {
-            if(layouts[currentBreakpoint][iIndex].y !== layouts[currentBreakpoint][index].y && ((x1 >= x3 && x2 <= x4) || (x1 > x3 && x1 < x4 && x2 > x4) || (x1 < x3 && x2 < x4 && x3 < x2))) {
-              item.tag.style.background = getRandomColor()
-              console.log(index)
-              itemsTranslated = [...itemsTranslated, index]
-              itemsResizedDiff.map((item, index) => {
-                itemsTranslated.map((itemTranslated) => {
-                  x1 = layouts[currentBreakpoint][itemTranslated].x
-                  x2 = x1 + layouts[currentBreakpoint][itemTranslated].w
-                  x3 = layouts[currentBreakpoint][index].x
-                  x4 = x3 + layouts[currentBreakpoint][index].w
-                  if(itemTranslated !== index) {
-                    if(((x1 >= x3 && x2 <= x4) || (x1 > x3 && x1 < x4 && x2 > x4) || (x1 < x3 && x2 < x4 && x3 < x2))) {
-                      itemsOrigin = [...itemsOrigin, {itemTranslated:itemTranslated, itemIndex:index}]
-
-                    }
-                  }
-                })
-                console.log(itemsOrigin)
-                itemsOrigin.map((itemOrigin) => {
-                  h = layouts[currentBreakpoint][itemOrigin.itemIndex].h
-                  console.log(h)
-                  if(minY < h) minY = h
-                  console.log(minY)
-                })
-
-              })
-              console.log(itemsResizedDiff[iIndex].translateY)
-              if(itemsResizedDiff[iIndex].translateY < 0) {
-                layouts[currentBreakpoint][index].y = minY
-                item.tag.style.transform = `translateX(${coor[0]}px) translateY(${minY * 10}px)`
-              }
-              else {
-                if(h > layouts[currentBreakpoint][index].y) {
-                  layouts[currentBreakpoint][index].y = layouts[currentBreakpoint][index].y + itemsResizedDiff[iIndex].translateY
-                  item.tag.style.transform = `translateX(${coor[0]}px) translateY(${layouts[currentBreakpoint][index].y * 10}px)`
-                }
-              }
-
-            }
-          }
-        })
-
-      })
-    })
-  }
-
-  getComputedTranslateXY(obj) {
-    const transArr = [];
-      if(!window.getComputedStyle) return;
-      const style = getComputedStyle(obj),
-          transform = style.transform || style.webkitTransform || style.mozTransform || 'none';
-      let mat = transform.match(/^matrix3d\((.+)\)$/);
-      if(mat) return parseFloat(mat[1].split(', ')[13]);
-      mat = transform.match(/^matrix\((.+)\)$/);
-      mat ? transArr.push(parseFloat(mat[1].split(', ')[4])) : 0;
-      mat ? transArr.push(parseFloat(mat[1].split(', ')[5])) : 0;
-      return transArr;
   }
 
   updateInput(index, name, inputContent) {
@@ -302,6 +206,10 @@ class MyResponsiveGrid extends React.Component {
         this.setItemHeigth()
       })
 
+    }
+    else {
+      console.log('!!!!')
+      this.setItemHeigth()
     }
   }
 
@@ -347,7 +255,8 @@ class MyResponsiveGrid extends React.Component {
       layouts: layouts
     }, () => {
       this.onSetLeaf(false)
-      this.setState({transition: 'height, transform'});
+      setTimeout(() => {this.setState({transition: 'height, transform'})}, 500);
+
     })
 
   }
@@ -452,6 +361,7 @@ class MyResponsiveGrid extends React.Component {
                     {
                       return(
                       <div
+                        id={`item-${layout.i}`}
                         className={focused === index ? "focused" : null}
                         key={layout.i}
                         data-grid={{x: layout.x , y: layout.y, w: layout.w,  h: layout.h}}>

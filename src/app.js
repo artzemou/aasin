@@ -162,7 +162,7 @@ class App extends React.Component {
                 overflow-x: hidden;
 
                 #view-content{
-                  margin: 5rem auto;
+                  margin: 18rem auto;
                   max-width: 1200px;
                 }
                 a{

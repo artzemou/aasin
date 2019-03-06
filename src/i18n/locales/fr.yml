@@ -9,6 +9,7 @@ app:
     newLeaf: Créer une nouvelle page
     deleteLeaf: Supprimer une page
     designModification: Modifier le design
+    editWebspace: Modifier l'arborescence du site 
   newLeafPattern:
     title: Créer une nouvelle page.
     addTitle: Merci de donner un titre à cette page.

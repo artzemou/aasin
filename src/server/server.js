@@ -24,6 +24,13 @@ const favicon = require('serve-favicon')
 
 server.use(favicon('./public/fav.ico'))
 
+server.get('*.js', (req, res, next) => {
+    req.url = req.url + '.gz';
+    res.set('Content-Encoding', 'gzip');
+    res.set('Content-Type', 'text/javascript');
+    next();
+});
+
 server.use(bodyParser.json({limit: "50mb"}))
 server.use(bodyParser.urlencoded({limit: "50mb", extended: true, parameterLimit:50000}))
 

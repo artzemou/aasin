@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const port = process.env.PORT || 8080;
+export const port = process.env.PORT || 1313;
 export const host = 'localhost';
 
 var baseURL = 'http://localhost:' + port + '/'
@@ -10,6 +10,6 @@ if (process.env.NODE_ENV === 'production') {
 
 console.log(baseURL, process.env.NODE_ENV)
 export default axios.create({
-    baseURL: baseURL,
-    timeout: 0
+  baseURL: baseURL,
+  timeout: 0
 });

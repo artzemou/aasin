@@ -10,6 +10,7 @@ app:
     newLeaf: Create a new page
     deleteLeaf: Delete a page
     designModification: Design modification
+    editWebspace: Edit webspace
   newLeafPattern:
     title: Create a new page.
     addTitle: Please, write title.

@@ -40,7 +40,7 @@ class Dashboard extends React.Component {
             <div className="dashboard">
               <div className="dashboard-nav">
                 <Ripples color={color}>
-                  <Link to="/newLeaf" onClick={this.delayRedirect}>{I18n.t('app.dashboard.newLeaf')}</Link>
+                  <Link to="/newLeaf" onClick={this.delayRedirect}>{I18n.t('app.dashboard.editWebspace')}</Link>
                 </Ripples>
                 <Ripples color={color} >
                   <Link to="/deletePage" onClick={this.delayRedirect}>{I18n.t('app.dashboard.deleteLeaf')}</Link>
