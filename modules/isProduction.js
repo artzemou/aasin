@@ -1,49 +1,47 @@
 const mysql = require('mysql')
 
-const isProduction = (type) => {
-
+const isProduction = type => {
   var connexion = null,
-    pool = null;
+    pool = null
 
   if (process.env.NODE_ENV === 'production') {
     connexion = mysql.createConnection({
-      host: "127.0.0.1",
-      socketPath: "/srv/run/mysqld/mysqld.sock",
-      user: "root",
-      password: "@ltgrrr",
-      database: "Asin"
+      host: '127.0.0.1',
+      // socketPath: "/srv/run/mysqld/mysqld.sock",
+      user: 'root',
+      password: '@ltgrrr',
+      database: 'Asin',
     })
     pool = mysql.createPool({
-      host: "127.0.0.1",
-      socketPath: "/srv/run/mysqld/mysqld.sock",
-      user: "root",
-      password: "@ltgrrr",
-      database: "Asin",
+      host: '127.0.0.1',
+      // socketPath: "/srv/run/mysqld/mysqld.sock",
+      user: 'root',
+      password: '@ltgrrr',
+      database: 'Asin',
       queueLimit: 0, // unlimited queueing
-      connectionLimit: 100
+      connectionLimit: 100,
     })
   } else {
     connexion = mysql.createConnection({
-      host: "127.0.0.1",
-      user: "root",
-      password: "@ltgrrr",
-      database: "Asin",
-      charset: 'utf8'
+      host: '127.0.0.1',
+      user: 'root',
+      password: '@ltgrrr',
+      database: 'Asin',
+      charset: 'utf8',
     })
     pool = mysql.createPool({
-      host: "127.0.0.1",
-      user: "root",
-      password: "@ltgrrr",
-      database: "Asin",
+      host: '127.0.0.1',
+      user: 'root',
+      password: '@ltgrrr',
+      database: 'Asin',
       charset: 'utf8',
       queueLimit: 0, // unlimited queueing
-      connectionLimit: 100
-    });
+      connectionLimit: 100,
+    })
   }
 
   if (type === 'connexion') return connexion
   else return pool
 }
 
-
-module.exports = isProduction;
+module.exports = isProduction

@@ -6,11 +6,10 @@
   "license": "MIT",
   "main": "./dist/server.js",
   "scripts": {
-    "start": "NODE_ENV=production forever -m 10 -a -l logFile.log -e errorFile.log ./dist/server.js",
+    "start": "pm2 start ./dist/server.js",
     "dev": "NODE_ENV=development webpack-dev-server --mode development  -d --hot --config webpack.config.js --watch",
-    "build": "NODE_ENV=development webpack --mode development && node ./dist/server",
-    "stop": "forever stop ./dist/server.js",
-    "build:prod": "NODE_ENV=production webpack --mode production --progress",
+    "stop": "pm2 stop ./dist/server.js",
+    "build": "NODE_ENV=production webpack --mode production --progress",
     "watch": "webpack --watch"
   },
   "devDependencies": {
@@ -57,6 +56,7 @@
     "mysql": "^2.16.0",
     "optimize-css-assets-webpack-plugin": "^5.0.1",
     "parallax-js": "^3.1.0",
+    "pm2": "^3.3.1",
     "postcss-loader": "^3.0.0",
     "react": "^16.3.0",
     "react-color": "^2.14.1",
