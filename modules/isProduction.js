@@ -7,16 +7,16 @@ const isProduction = type => {
   if (process.env.NODE_ENV === 'production') {
     connexion = mysql.createConnection({
       host: '127.0.0.1',
-      // socketPath: "/srv/run/mysqld/mysqld.sock",
+      socketPath: "/srv/run/mysqld/mysqld.sock",
       user: 'root',
-      password: '@ltgrrr',
+      password: '',
       database: 'Asin',
     })
     pool = mysql.createPool({
       host: '127.0.0.1',
-      // socketPath: "/srv/run/mysqld/mysqld.sock",
+      socketPath: "/srv/run/mysqld/mysqld.sock",
       user: 'root',
-      password: '@ltgrrr',
+      password: '',
       database: 'Asin',
       queueLimit: 0, // unlimited queueing
       connectionLimit: 100,
