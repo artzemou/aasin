@@ -6,7 +6,7 @@
   "license": "MIT",
   "main": "./dist/server.js",
   "scripts": {
-    "start": "pm2 start ./dist/server.js",
+    "start": "node ./dist/server.js",
     "dev": "NODE_ENV=development webpack-dev-server --mode development  -d --hot --config webpack.config.js --watch",
     "stop": "pm2 stop ./dist/server.js",
     "build": "NODE_ENV=production webpack --mode production --progress",
